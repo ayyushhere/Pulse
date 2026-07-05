@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { useAuth, SignedIn, SignedOut } from "@clerk/clerk-react";
-import { Search, ArrowLeft } from "lucide-react";
+import { Search, ArrowLeft, Loader2, Coffee } from "lucide-react";
 import ResultCard from "./components/ResultCard.jsx";
 import TopNav from "./components/TopNav.jsx";
 import Portfolio from "./components/Portfolio.jsx";
@@ -19,6 +19,29 @@ export default function App() {
   const [loadingStep, setLoadingStep] = useState("Initializing AI Agent...");
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
+  const [serverWaking, setServerWaking] = useState(true);
+  const [countdown, setCountdown] = useState(50);
+
+  useEffect(() => {
+    let intervalId;
+    const checkHealth = async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/health`);
+        if (res.ok) {
+          setServerWaking(false);
+          clearInterval(intervalId);
+        }
+      } catch (err) {
+        // Still sleeping
+      }
+    };
+    checkHealth();
+    intervalId = setInterval(() => {
+      checkHealth();
+      setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+    return () => clearInterval(intervalId);
+  }, []);
   
   const handleSelectCompany = (itemOrTicker) => {
     if (typeof itemOrTicker === "string") {
@@ -114,6 +137,27 @@ export default function App() {
   return (
     <div className="min-h-screen w-full bg-slate-950 text-slate-200 selection:bg-blue-500/30 overflow-x-hidden">
       
+      {serverWaking && (
+        <div className="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-slate-800 p-8 rounded-3xl max-w-md w-full text-center shadow-2xl animate-in fade-in zoom-in duration-500">
+            <div className="flex justify-center mb-6">
+              <div className="relative">
+                <Coffee size={48} className="text-blue-500 animate-pulse" />
+                <Loader2 size={24} className="text-purple-500 absolute -bottom-2 -right-2 animate-spin" />
+              </div>
+            </div>
+            <h2 className="text-2xl font-bold text-white mb-2">Waking up the AI Brains...</h2>
+            <p className="text-slate-400 mb-6 text-sm leading-relaxed">
+              Our Render free-tier server takes a quick nap after 15 minutes of inactivity. Please cooperate, we are broke college students! 😅
+            </p>
+            <div className="bg-slate-950 rounded-xl p-4 border border-slate-800 flex items-center justify-between">
+              <span className="text-slate-300 font-medium">Spinning up engines</span>
+              <span className="text-blue-400 font-bold font-mono text-xl">{countdown}s</span>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Global Background Glows */}
       <div className="fixed top-[-20%] right-[-10%] w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none z-0" />
       <div className="fixed bottom-[-20%] left-[-10%] w-[50%] h-[50%] bg-purple-600/10 rounded-full blur-[120px] pointer-events-none z-0" />

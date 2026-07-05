@@ -28,6 +28,10 @@ app.use(clerkMiddleware({
   clockSkewInMs: 15 * 60 * 1000
 }));
 
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok" });
+});
+
 app.post("/api/research", async (req, res) => {
   const logMsg = `\n[POST /api/research] Received request\n` +
                  `Authorization header: ${req.headers.authorization ? "Present" : "Missing"}\n` +
