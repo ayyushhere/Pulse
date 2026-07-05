@@ -1,5 +1,7 @@
 # Pulse - AI Investment Research Agent
 
+🚀 **Live Demo:** [https://pulse-aie.vercel.app/](https://pulse-aie.vercel.app/)
+
 ## Overview - What it does
 Pulse is a full-stack AI-powered investment research platform. It takes a company ticker or name, performs deep-dive fundamental and sentiment research, and provides a decisive **Invest or Pass** verdict. 
 
