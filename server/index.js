@@ -14,7 +14,9 @@ const app = express();
 const prisma = new PrismaClient({ adapter });
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: (origin, callback) => {
+    callback(null, true); // Allow all origins for easy deployment
+  },
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true
