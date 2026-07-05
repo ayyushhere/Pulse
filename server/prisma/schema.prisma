@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model SearchHistory {
+  id          String   @id @default(cuid())
+  userId      String   // Clerk user ID
+  companyName String
+  ticker      String?
+  sector      String?
+  verdict     String
+  confidence  Int
+  reasoning   String[] // We store the array of reasoning strings natively in Postgres
+  fullData    Json?    // Stores the complete state object from LangGraph
+  createdAt   DateTime @default(now())
+}
