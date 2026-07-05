@@ -67,31 +67,37 @@ export default function App() {
       const decoder = new TextDecoder("utf-8");
       
       let done = false;
+      let buffer = "";
       while (!done) {
         const { value, done: readerDone } = await reader.read();
         done = readerDone;
         if (value) {
-          const chunk = decoder.decode(value, { stream: true });
-          const lines = chunk.split('\n');
-          for (const line of lines) {
-            if (line.startsWith('data: ')) {
-              const dataStr = line.replace('data: ', '').trim();
-              if (!dataStr) continue;
-              try {
-                const parsed = JSON.parse(dataStr);
-                if (parsed.type === 'complete') {
-                  setResult(parsed.state);
-                } else if (parsed.type === 'progress') {
-                  if (parsed.state.marketAnalysis) setLoadingStep("Finalizing Investment Verdict...");
-                  else if (parsed.state.financialAnalysis) setLoadingStep("Analyzing Market Sentiment & News...");
-                  else if (parsed.state.researchData?.news) setLoadingStep("Performing Deep Financial Analysis...");
-                  else if (parsed.state.researchData?.financials) setLoadingStep("Scanning Global News Sources...");
-                  else setLoadingStep("Initializing AI Agent...");
-                } else if (parsed.type === 'error') {
-                  throw new Error(parsed.message || "Unknown error");
+          buffer += decoder.decode(value, { stream: true });
+          const parts = buffer.split('\n\n');
+          buffer = parts.pop();
+          
+          for (const part of parts) {
+            const lines = part.split('\n');
+            for (const line of lines) {
+              if (line.startsWith('data: ')) {
+                const dataStr = line.replace('data: ', '').trim();
+                if (!dataStr) continue;
+                try {
+                  const parsed = JSON.parse(dataStr);
+                  if (parsed.type === 'complete') {
+                    setResult(parsed.state);
+                  } else if (parsed.type === 'progress') {
+                    if (parsed.state.marketAnalysis) setLoadingStep("Finalizing Investment Verdict...");
+                    else if (parsed.state.financialAnalysis) setLoadingStep("Analyzing Market Sentiment & News...");
+                    else if (parsed.state.researchData?.news) setLoadingStep("Performing Deep Financial Analysis...");
+                    else if (parsed.state.researchData?.financials) setLoadingStep("Scanning Global News Sources...");
+                    else setLoadingStep("Initializing AI Agent...");
+                  } else if (parsed.type === 'error') {
+                    throw new Error(parsed.message || "Unknown error");
+                  }
+                } catch (e) {
+                  console.error("Error parsing chunk:", e, dataStr);
                 }
-              } catch (e) {
-                // ignore incomplete chunks if they happen
               }
             }
           }
