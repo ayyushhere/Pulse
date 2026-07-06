@@ -1,5 +1,5 @@
 import { SignInButton, SignUpButton, SignedOut } from "@clerk/clerk-react";
-import { ArrowRight, Sparkles, CheckCircle } from "lucide-react";
+import { ArrowRight, Sparkles, CheckCircle, Github, Linkedin, Mail } from "lucide-react";
 import Pricing from "./Pricing.jsx";
 // TODO: Add hero illustration image at src/assets/hero.png and import below
 // import heroImg from "../assets/hero.png";
@@ -101,6 +101,33 @@ export default function Hero() {
       <section className="relative py-16 bg-slate-950/50 border-t border-slate-800/50 backdrop-blur-sm z-10">
         <Pricing />
       </section>
+
+      {/* Developer Footer */}
+      <footer className="w-full bg-slate-950 py-12 border-t border-slate-900/50 relative z-10 text-center">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col items-center">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-500 to-purple-500 text-white flex items-center justify-center font-black shadow-lg mb-6">
+            P
+          </div>
+          <h3 className="text-xl font-bold text-white mb-2">Developed by Ayush</h3>
+          <p className="text-slate-400 max-w-md mx-auto mb-8 text-sm">
+            Built with React, Node.js, LangGraph, and Google Gemini. Part of a full-stack AI engineering assignment showcasing autonomous agentic workflows.
+          </p>
+          <div className="flex space-x-6">
+            <a href="https://github.com/ayyushhere" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white hover:scale-110 transition-all duration-300 flex items-center justify-center w-12 h-12 rounded-full bg-slate-900 border border-slate-800 hover:border-slate-600">
+              <Github size={20} />
+            </a>
+            <a href="https://linkedin.com/in/ayyushhere" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white hover:scale-110 transition-all duration-300 flex items-center justify-center w-12 h-12 rounded-full bg-slate-900 border border-slate-800 hover:border-slate-600">
+              <Linkedin size={20} />
+            </a>
+            <a href="mailto:contact@ayush.com" className="text-slate-400 hover:text-white hover:scale-110 transition-all duration-300 flex items-center justify-center w-12 h-12 rounded-full bg-slate-900 border border-slate-800 hover:border-slate-600">
+              <Mail size={20} />
+            </a>
+          </div>
+          <p className="text-slate-600 text-xs mt-12">
+            © {new Date().getFullYear()} Pulse AI Investment Research. All rights reserved.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
