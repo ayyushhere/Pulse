@@ -177,6 +177,7 @@ export default function App() {
             handleSubmit={handleSubmit} 
             loading={loading} 
           />
+          <MarketTicker />
           
           <main className="flex-1 pt-28 pb-12 px-6 max-w-6xl mx-auto w-full">
             <Routes>
