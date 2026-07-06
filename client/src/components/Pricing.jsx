@@ -54,7 +54,7 @@ export default function Pricing() {
             )}
             
             <div className="flex items-center space-x-4 mb-4">
-              <div className="p-3 bg-slate-900/50 rounded-xl border border-slate-800">
+              <div className="p-3 bg-white/10 rounded-xl border border-white/20">
                 {plan.icon}
               </div>
               <h3 className="text-2xl font-bold text-white">{plan.name}</h3>
@@ -77,7 +77,7 @@ export default function Pricing() {
             <button className={`w-full py-4 rounded-xl font-bold transition-all shadow-lg ${
               plan.popular 
                 ? "bg-emerald-500 hover:bg-emerald-400 text-slate-900" 
-                : "bg-slate-800 hover:bg-slate-700 text-white border border-slate-600"
+                : "bg-white/5 hover:bg-white/10 text-white border border-white/20"
             }`}>
               Get Started
             </button>

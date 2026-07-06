@@ -135,32 +135,31 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-slate-950 text-slate-200 selection:bg-blue-500/30 overflow-x-hidden">
+    <div className="min-h-screen w-full bg-transparent text-slate-200 selection:bg-blue-500/30 overflow-x-hidden">
       
+      {/* Global Grid Overlay */}
+      <div className="fixed inset-0 z-0 pointer-events-none bg-grid opacity-30" />
+
       {serverWaking && (
-        <div className="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 p-8 rounded-3xl max-w-md w-full text-center shadow-2xl animate-in fade-in zoom-in duration-500">
+        <div className="fixed inset-0 z-[100] bg-[#07091D]/80 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-[#0A0D28] border border-blue-900/30 p-8 rounded-3xl max-w-md w-full text-center shadow-2xl animate-in fade-in zoom-in duration-500">
             <div className="flex justify-center mb-6">
               <div className="relative">
-                <Coffee size={48} className="text-blue-500 animate-pulse" />
-                <Loader2 size={24} className="text-purple-500 absolute -bottom-2 -right-2 animate-spin" />
+                <Coffee size={48} className="text-blue-400 animate-pulse" />
+                <Loader2 size={24} className="text-purple-400 absolute -bottom-2 -right-2 animate-spin" />
               </div>
             </div>
-            <h2 className="text-2xl font-bold text-white mb-2">Waking up the AI Brains...</h2>
+            <h2 className="text-2xl font-bold text-white mb-2 text-glow">Waking up the AI Brains...</h2>
             <p className="text-slate-400 mb-6 text-sm leading-relaxed">
-              Our Render free-tier server takes a quick nap after 15 minutes of inactivity. Please cooperate, we are broke college students! 😅
+              Our free-tier server takes a quick nap after 15 minutes of inactivity. Please cooperate, we are broke college students! 😅
             </p>
-            <div className="bg-slate-950 rounded-xl p-4 border border-slate-800 flex items-center justify-between">
+            <div className="bg-black/50 rounded-xl p-4 border border-blue-900/30 flex items-center justify-between">
               <span className="text-slate-300 font-medium">Spinning up engines</span>
               <span className="text-blue-400 font-bold font-mono text-xl">{countdown}s</span>
             </div>
           </div>
         </div>
       )}
-
-      {/* Global Background Glows */}
-      <div className="fixed top-[-20%] right-[-10%] w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none z-0" />
-      <div className="fixed bottom-[-20%] left-[-10%] w-[50%] h-[50%] bg-purple-600/10 rounded-full blur-[120px] pointer-events-none z-0" />
 
       <SignedOut>
         <div className="relative z-10">
@@ -200,7 +199,7 @@ export default function App() {
                           <input
                             type="text"
                             placeholder="Search company (e.g. Amazon, NFLX)..."
-                            className="w-full bg-slate-900/60 border border-slate-700 text-white text-lg rounded-full py-4 pl-14 pr-6 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-2xl backdrop-blur-md"
+                            className="w-full bg-white/5 border border-white/10 text-white text-lg rounded-full py-4 pl-14 pr-6 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-transparent transition-all shadow-2xl backdrop-blur-md"
                             value={company}
                             onChange={(e) => setCompany(e.target.value)}
                             disabled={loading}
@@ -208,7 +207,7 @@ export default function App() {
                           <button 
                             type="submit" 
                             disabled={loading || !company.trim()}
-                            className="absolute right-2 top-2 bottom-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-semibold rounded-full px-6 transition-colors"
+                            className="absolute right-2 top-2 bottom-2 bg-white hover:bg-slate-100 disabled:opacity-50 text-slate-900 font-semibold rounded-full px-6 transition-colors shadow-[0_0_15px_rgba(255,255,255,0.2)]"
                           >
                             Analyze
                           </button>
@@ -216,21 +215,21 @@ export default function App() {
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
-                        <div className="bg-slate-900/40 backdrop-blur-xl border border-slate-700/50 rounded-3xl p-6 cursor-pointer hover:bg-slate-800/60 hover:-translate-y-1 transition-all duration-300 shadow-xl" onClick={() => handleSelectCompany("Nvidia")}>
+                        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 cursor-pointer hover:bg-white/10 hover:-translate-y-1 transition-all duration-300 shadow-xl" onClick={() => handleSelectCompany("Nvidia")}>
                           <div className="flex justify-between items-start mb-3">
                             <h3 className="font-bold text-white text-xl">Nvidia (NVDA)</h3>
                             <span className="bg-emerald-500/10 text-emerald-400 text-xs font-bold px-2.5 py-1 rounded-full border border-emerald-500/20">+2.4%</span>
                           </div>
                           <p className="text-sm text-slate-400 leading-relaxed">Trending heavily due to new Blackwell AI chip announcements and stellar earnings.</p>
                         </div>
-                        <div className="bg-slate-900/40 backdrop-blur-xl border border-slate-700/50 rounded-3xl p-6 cursor-pointer hover:bg-slate-800/60 hover:-translate-y-1 transition-all duration-300 shadow-xl" onClick={() => handleSelectCompany("Tesla")}>
+                        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 cursor-pointer hover:bg-white/10 hover:-translate-y-1 transition-all duration-300 shadow-xl" onClick={() => handleSelectCompany("Tesla")}>
                           <div className="flex justify-between items-start mb-3">
                             <h3 className="font-bold text-white text-xl">Tesla (TSLA)</h3>
                             <span className="bg-red-500/10 text-red-400 text-xs font-bold px-2.5 py-1 rounded-full border border-red-500/20">-1.2%</span>
                           </div>
                           <p className="text-sm text-slate-400 leading-relaxed">High volatility following recent margin concerns and robotaxi event announcements.</p>
                         </div>
-                        <div className="bg-slate-900/40 backdrop-blur-xl border border-slate-700/50 rounded-3xl p-6 cursor-pointer hover:bg-slate-800/60 hover:-translate-y-1 transition-all duration-300 shadow-xl" onClick={() => handleSelectCompany("Microsoft")}>
+                        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 cursor-pointer hover:bg-white/10 hover:-translate-y-1 transition-all duration-300 shadow-xl" onClick={() => handleSelectCompany("Microsoft")}>
                           <div className="flex justify-between items-start mb-3">
                             <h3 className="font-bold text-white text-xl">Microsoft (MSFT)</h3>
                             <span className="bg-emerald-500/10 text-emerald-400 text-xs font-bold px-2.5 py-1 rounded-full border border-emerald-500/20">+0.8%</span>
@@ -258,7 +257,7 @@ export default function App() {
                         Analyzing {company}...
                       </h2>
                       
-                      <div className="flex items-center space-x-3 bg-slate-900/60 backdrop-blur-md border border-slate-700/50 px-6 py-3 rounded-full shadow-lg">
+                      <div className="flex items-center space-x-3 bg-white/5 backdrop-blur-md border border-white/10 px-6 py-3 rounded-full shadow-lg">
                         <div className="w-2 h-2 rounded-full bg-blue-500 animate-[ping_1.5s_cubic-bezier(0,0,0.2,1)_infinite]"></div>
                         <p className="text-slate-300 font-medium tracking-wide">
                           {loadingStep}
@@ -278,7 +277,7 @@ export default function App() {
                     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 w-full max-w-6xl mx-auto">
                       <button 
                         onClick={() => { setResult(null); setCompany(""); }}
-                        className="mb-6 flex items-center text-sm font-medium text-slate-400 hover:text-white transition-colors bg-slate-900/50 px-4 py-2 rounded-full border border-slate-700/50 hover:bg-slate-800 shadow-sm w-fit"
+                        className="mb-6 flex items-center text-sm font-medium text-slate-400 hover:text-white transition-colors bg-white/5 px-4 py-2 rounded-full border border-white/10 hover:bg-white/10 shadow-sm w-fit"
                       >
                         <ArrowLeft size={16} className="mr-2" />
                         Back to Search

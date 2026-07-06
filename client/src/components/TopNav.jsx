@@ -18,14 +18,14 @@ export default function TopNav({ company, setCompany, handleSubmit, loading }) {
 
   return (
     <header className="fixed top-4 left-1/2 -translate-x-1/2 w-full max-w-6xl z-50 px-4">
-      <div className="bg-slate-900/40 backdrop-blur-xl border border-slate-700/50 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.3)] flex items-center justify-between px-6 py-3">
+      <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.3)] flex items-center justify-between px-6 py-3">
         
         {/* Logo */}
-        <NavLink to="/" className="flex items-center space-x-2 mr-6 cursor-pointer hover:opacity-80 transition-opacity">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 text-white flex items-center justify-center font-black text-sm shadow-[0_0_15px_rgba(59,130,246,0.5)]">
+        <NavLink to="/" className="flex items-center space-x-3 group cursor-pointer hover:opacity-90 transition-opacity">
+          <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.4)] text-slate-900 font-black text-sm group-hover:scale-105 transition-transform">
             P
           </div>
-          <span className="font-bold text-white tracking-tight hidden lg:block">Pulse</span>
+          <span className="text-xl font-black tracking-tight text-white hidden sm:block">Pulse</span>
         </NavLink>
 
         {/* Mobile menu toggle */}
@@ -38,7 +38,7 @@ export default function TopNav({ company, setCompany, handleSubmit, loading }) {
         </button>
 
         {/* Navigation Links (desktop) */}
-        <nav className="hidden md:flex items-center space-x-1 mr-6 bg-slate-950/50 p-1 rounded-full border border-slate-800">
+        <nav className="hidden md:flex items-center space-x-1 mr-6 bg-black/20 p-1 rounded-full border border-white/5">
           {navItems.map((item) => (
             <NavLink
               key={item.path}
@@ -46,8 +46,8 @@ export default function TopNav({ company, setCompany, handleSubmit, loading }) {
               className={({ isActive }) =>
                 `flex items-center space-x-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                   isActive
-                    ? "bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-white shadow-inner border border-blue-500/30"
-                    : "text-slate-400 hover:text-white hover:bg-slate-800/50 border border-transparent"
+                    ? "bg-white/15 text-white shadow-inner border border-white/20"
+                    : "text-slate-400 hover:text-white hover:bg-white/5 border border-transparent"
                 }`
               }
             >
@@ -59,7 +59,7 @@ export default function TopNav({ company, setCompany, handleSubmit, loading }) {
 
         {/* Mobile navigation dropdown */}
         {menuOpen && ( /* Mobile dropdown with high z-index */
-          <nav className="absolute top-full left-0 w-full bg-slate-900/95 backdrop-blur-md border-t border-slate-800 p-4 md:hidden rounded-b-lg shadow-lg">
+          <nav className="absolute top-full left-0 w-full bg-black/90 backdrop-blur-md border-t border-white/10 p-4 md:hidden rounded-b-lg shadow-lg">
             {navItems.map((item) => (
               <NavLink
                 key={item.path}
@@ -69,7 +69,7 @@ export default function TopNav({ company, setCompany, handleSubmit, loading }) {
                   `flex items-center space-x-2 px-4 py-2 rounded-md text-base font-medium transition-colors ${
                     isActive
                       ? "bg-gradient-to-r from-blue-500/30 to-purple-500/30 text-white"
-                      : "text-slate-300 hover:text-white hover:bg-slate-800/60"
+                      : "text-slate-300 hover:text-white hover:bg-white/10"
                   }`
                 }
               >
@@ -88,7 +88,7 @@ export default function TopNav({ company, setCompany, handleSubmit, loading }) {
           <input
             type="text"
             placeholder="Search Ticker (e.g. NVDA)..."
-            className="w-full bg-slate-950/50 border border-slate-700/50 text-white text-sm rounded-full py-2.5 pl-11 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all placeholder-slate-500 shadow-inner backdrop-blur-sm"
+            className="w-full bg-white/5 border border-white/10 text-white text-sm rounded-full py-2.5 pl-11 pr-4 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 transition-all placeholder-slate-500 shadow-inner backdrop-blur-sm"
             value={company}
             onChange={(e) => setCompany(e.target.value)}
             disabled={loading}

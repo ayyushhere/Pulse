@@ -49,7 +49,7 @@ export default function History({ onSelectCompany }) {
 
   if (history.length === 0) {
     return (
-      <div className="text-center p-12 bg-slate-900/50 backdrop-blur-md rounded-3xl border border-slate-800">
+      <div className="text-center p-12 bg-white/5 backdrop-blur-md rounded-3xl border border-white/10">
         <Clock size={48} className="mx-auto text-slate-600 mb-4" />
         <h3 className="text-2xl font-bold text-white mb-2">No History Found</h3>
         <p className="text-slate-400">You haven't researched any companies yet.</p>
@@ -68,7 +68,7 @@ export default function History({ onSelectCompany }) {
           return (
             <div 
               key={item.id} 
-              className="bg-slate-900/60 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-6 shadow-xl hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden group cursor-pointer"
+              className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-xl hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden group cursor-pointer"
               onClick={() => onSelectCompany(item)}
             >
               {/* Subtle glowing orb inside card */}
@@ -93,12 +93,12 @@ export default function History({ onSelectCompany }) {
                   <span>Confidence</span>
                   <span>{item.confidence}%</span>
                 </div>
-                <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
                   <div className={`h-full rounded-full ${isInvest ? 'bg-emerald-500' : 'bg-red-500'}`} style={{ width: `${item.confidence}%` }}></div>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between text-slate-500 text-xs font-medium border-t border-slate-800 pt-4">
+              <div className="flex items-center justify-between text-slate-500 text-xs font-medium border-t border-white/10 pt-4">
                 <span className="flex items-center">
                   <Clock size={12} className="mr-1" />
                   {new Date(item.createdAt).toLocaleDateString()}

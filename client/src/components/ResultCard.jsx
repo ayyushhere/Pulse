@@ -19,14 +19,14 @@ export default function ResultCard({ data }) {
   return (
     <div className="space-y-8">
       {/* Header section */}
-      <div className="flex items-end justify-between border-b border-slate-800 pb-6">
+      <div className="flex items-end justify-between border-b border-white/10 pb-6">
         <div>
           <h2 className="text-4xl font-extrabold text-white mb-3">
             {companyName} {ticker ? <span className="text-slate-400 font-medium">({ticker})</span> : ""}
           </h2>
           <div className="flex space-x-3">
             {sector && (
-              <span className="bg-slate-800 text-slate-300 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full border border-slate-700">
+              <span className="bg-white/10 text-white text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full border border-white/20">
                 {sector}
               </span>
             )}
@@ -44,7 +44,7 @@ export default function ResultCard({ data }) {
         
         {/* Left Column: Final Synthesis & Sentiment Pulse */}
         <div className="space-y-6">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 flex flex-col items-center justify-center text-center shadow-lg relative overflow-hidden">
+          <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-8 flex flex-col items-center justify-center text-center shadow-lg relative overflow-hidden">
             {/* Glowing background hint */}
             <div className={`absolute -top-10 -right-10 w-32 h-32 blur-[60px] rounded-full pointer-events-none ${isInvest ? 'bg-emerald-500/20' : 'bg-red-500/20'}`}></div>
             
@@ -58,20 +58,20 @@ export default function ResultCard({ data }) {
             <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-6">Model Confidence</div>
             
             {/* Confidence Bar */}
-            <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+            <div className="w-full bg-white/10 h-2 rounded-full overflow-hidden">
               <div className={`h-full rounded-full ${isInvest ? 'bg-emerald-500' : 'bg-red-500'}`} style={{ width: `${decision.confidence}%` }}></div>
             </div>
           </div>
 
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-lg">
+          <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-lg">
             <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center mb-4">
               <TrendingDown size={14} className="mr-2" />
               Sentiment Pulse
             </h3>
             <div className="flex flex-wrap gap-2">
-              <span className="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 text-sm font-medium border border-slate-700">High Volatility</span>
-              <span className="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 text-sm font-medium border border-slate-700">Revenue Growth</span>
-              <span className="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 text-sm font-medium border border-slate-700">Ecosystem Lock-in</span>
+              <span className="px-3 py-1.5 rounded-lg bg-white/10 text-white text-sm font-medium border border-white/20">High Volatility</span>
+              <span className="px-3 py-1.5 rounded-lg bg-white/10 text-white text-sm font-medium border border-white/20">Revenue Growth</span>
+              <span className="px-3 py-1.5 rounded-lg bg-white/10 text-white text-sm font-medium border border-white/20">Ecosystem Lock-in</span>
             </div>
           </div>
         </div>
@@ -79,7 +79,7 @@ export default function ResultCard({ data }) {
         {/* Right Column: Research Breakdown & Updates */}
         <div className="lg:col-span-2 space-y-6">
           
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-lg">
+          <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-8 shadow-lg">
             <h3 className="text-xl font-bold text-white mb-6">Research Breakdown</h3>
             <div className="space-y-6">
               {decision.reasoning?.map((point, i) => {
@@ -104,7 +104,7 @@ export default function ResultCard({ data }) {
             <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest">Critical Updates</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {criticalUpdates.map((update, i) => (
-                <div key={i} className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-sm">
+                <div key={i} className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-5 shadow-sm">
                   <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 flex items-center">
                     <Clock size={12} className="mr-1.5" />
                     {update.time}
@@ -119,13 +119,13 @@ export default function ResultCard({ data }) {
       </div>
 
       {/* Comparative Metrics Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl shadow-lg overflow-hidden">
-        <div className="p-6 border-b border-slate-800">
+      <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl shadow-lg overflow-hidden">
+        <div className="p-6 border-b border-white/10">
           <h3 className="text-xl font-bold text-white">Comparative Metrics</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
-            <thead className="bg-slate-800/50 text-xs font-bold text-slate-500 uppercase tracking-wider">
+            <thead className="bg-white/5 text-xs font-bold text-slate-400 uppercase tracking-wider">
               <tr>
                 <th className="px-6 py-4 font-bold">Metric</th>
                 <th className="px-6 py-4 font-bold">{ticker || "Company"}</th>
@@ -133,9 +133,9 @@ export default function ResultCard({ data }) {
                 <th className="px-6 py-4 font-bold">Variance</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/50">
+            <tbody className="divide-y divide-white/10">
               {metrics.map((row, i) => (
-                <tr key={i} className="hover:bg-slate-800/20 transition-colors">
+                <tr key={i} className="hover:bg-white/10 transition-colors">
                   <td className="px-6 py-4 font-semibold text-slate-300">{row.name}</td>
                   <td className="px-6 py-4 text-slate-400">{row.val}</td>
                   <td className="px-6 py-4 text-slate-400">{row.avg}</td>
