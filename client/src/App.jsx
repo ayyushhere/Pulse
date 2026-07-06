@@ -9,6 +9,7 @@ import Hero from "./components/Hero.jsx";
 import History from "./components/History.jsx";
 import Pricing from "./components/Pricing.jsx";
 import PulseChatbot from "./components/PulseChatbot.jsx";
+import MarketTicker from "./components/MarketTicker.jsx";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
 
@@ -184,23 +185,24 @@ export default function App() {
                 <div className="animate-in fade-in zoom-in-95 duration-300 h-full">
                   {!loading && !result && !error && (
                     <div className="flex flex-col items-center justify-center min-h-[60vh]">
-                      <div className="mb-12 text-center">
-                        <div className="w-20 h-20 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_50px_rgba(59,130,246,0.15)]">
-                          <Search size={32} className="text-blue-400" />
-                        </div>
-                        <h2 className="text-4xl font-black text-white mb-3">Begin Your Research</h2>
-                        <p className="text-lg text-slate-400 max-w-lg mx-auto leading-relaxed mb-8">
+                      <div className="text-center mb-16 relative">
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-blue-500/10 blur-[100px] rounded-full"></div>
+                        <h1 className="text-5xl font-bold text-white mb-4 tracking-tight text-glow relative z-10">
+                          Begin Your Research
+                        </h1>
+                        <p className="text-slate-400 max-w-lg mx-auto relative z-10">
                           Enter a company name or ticker to generate an AI-powered invest/pass verdict.
                         </p>
-                        
-                        <form onSubmit={handleSubmit} className="relative max-w-xl mx-auto w-full">
-                          <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                            <Search size={20} className="text-slate-400" />
-                          </div>
-                          <input
+                      </div>
+
+                      <div className="w-full max-w-3xl mb-20 relative">
+                        {/* Glow effect behind search bar */}
+                        <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/30 to-purple-500/30 blur-xl opacity-50 rounded-full"></div>
+                        <form onSubmit={handleSearch} className="relative z-10">
+                          <input 
                             type="text"
                             placeholder="Search company (e.g. Amazon, NFLX)..."
-                            className="w-full bg-white/5 border border-white/10 text-white text-lg rounded-full py-4 pl-14 pr-6 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-transparent transition-all shadow-2xl backdrop-blur-md"
+                            className="w-full bg-white/5 border border-white/10 text-white text-xl rounded-full py-5 pl-12 pr-40 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all shadow-2xl backdrop-blur-md placeholder:text-slate-500"
                             value={company}
                             onChange={(e) => setCompany(e.target.value)}
                             disabled={loading}
@@ -208,7 +210,7 @@ export default function App() {
                           <button 
                             type="submit" 
                             disabled={loading || !company.trim()}
-                            className="absolute right-2 top-2 bottom-2 bg-white hover:bg-slate-100 disabled:opacity-50 text-slate-900 font-semibold rounded-full px-6 transition-colors shadow-[0_0_15px_rgba(255,255,255,0.2)]"
+                            className="absolute right-2 top-2 bottom-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-400 hover:to-purple-500 disabled:opacity-50 text-white font-semibold rounded-full px-8 transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(139,92,246,0.5)]"
                           >
                             Analyze
                           </button>
