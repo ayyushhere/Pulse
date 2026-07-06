@@ -45,11 +45,11 @@ export default function Hero() {
         <div className="z-10 text-center max-w-5xl mx-auto w-full flex flex-col items-center">
           
           <h1 className="text-5xl md:text-7xl font-medium text-white mb-6 tracking-tight leading-tight text-glow max-w-4xl">
-            Let AI Take Over the Busywork Automate and Integrate
+            Institutional-Grade AI Investment Research
           </h1>
 
           <p className="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto font-light leading-relaxed mb-10">
-            Boost productivity with real-time AI task automation, ultra-fast cloud syncing, and seamless integration with the tools you already use.
+            Pulse instantly analyzes real-time market data, breaking news, and investor sentiment to deliver actionable insights on any stock in seconds.
           </p>
 
           <SignedOut>
