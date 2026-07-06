@@ -5,7 +5,6 @@ import { clerkMiddleware } from "@clerk/express";
 import pkg from "@prisma/client";
 import pg from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
-import yahooFinance from 'yahoo-finance2';
 import { investmentAgent } from "./lib/graph.js";
 import { model } from "./lib/model.js";
 import { SystemMessage, HumanMessage, AIMessage } from "@langchain/core/messages";
@@ -203,54 +202,60 @@ app.post("/api/chat", async (req, res) => {
 
 app.get("/api/ticker", async (req, res) => {
   try {
-    const symbols = ['^GSPC', '^IXIC', '^DJI', 'BTC-USD', 'ETH-USD', 'GC=F', '^VIX', '^TNX'];
+    const API_KEY = process.env.FINNHUB_API_KEY;
+    if (!API_KEY) {
+      throw new Error("Finnhub API key is not configured");
+    }
+
+    // Since Finnhub free tier doesn't support indices easily, we use ETF proxies + popular stocks
+    const symbols = [
+      { id: 'SPY', name: 'S&P 500' },
+      { id: 'QQQ', name: 'NASDAQ' },
+      { id: 'DIA', name: 'DOW' },
+      { id: 'NVDA', name: 'NVDA' },
+      { id: 'AAPL', name: 'AAPL' },
+      { id: 'MSFT', name: 'MSFT' },
+      { id: 'TSLA', name: 'TSLA' },
+      { id: 'BTC-USD', name: 'BTC' }
+    ];
     
     // Fetch quotes in parallel
     const quotes = await Promise.all(
-      symbols.map(async (symbol) => {
+      symbols.map(async (sym) => {
         try {
-          const quote = await yahooFinance.quote(symbol);
-          return quote;
+          const response = await fetch(`https://finnhub.io/api/v1/quote?symbol=${sym.id}&token=${API_KEY}`);
+          if (!response.ok) throw new Error("Fetch failed");
+          const data = await response.json();
+          // Finnhub quote format: c (current), d (change), dp (percent change)
+          return { symbol: sym.name, data };
         } catch (e) {
-          console.error(`Error fetching quote for ${symbol}:`, e.message);
+          console.error(`Error fetching quote for ${sym.id}:`, e.message);
           return null;
         }
       })
     );
 
-    const formattedData = quotes.filter(q => q !== null).map(q => {
-      // Map Yahoo symbols to clean names
-      let name = q.symbol;
-      if (name === '^GSPC') name = 'S&P 500';
-      else if (name === '^IXIC') name = 'NASDAQ';
-      else if (name === '^DJI') name = 'DOW';
-      else if (name === 'BTC-USD') name = 'BTC';
-      else if (name === 'ETH-USD') name = 'ETH';
-      else if (name === 'GC=F') name = 'GOLD';
-      else if (name === '^VIX') name = 'VIX';
-      else if (name === '^TNX') name = 'US10Y';
+    const formattedData = quotes
+      .filter(q => q !== null && q.data && q.data.c)
+      .map(q => {
+        const { c: currentPrice, dp: changePct } = q.data;
+        
+        let priceStr = '';
+        if (q.symbol === 'BTC') {
+           priceStr = `$${currentPrice.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
+        } else {
+           priceStr = `$${currentPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        }
 
-      // Format price based on asset
-      let priceStr = '';
-      if (['BTC', 'ETH', 'GOLD'].includes(name)) {
-        priceStr = `$${q.regularMarketPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-      } else if (name === 'US10Y') {
-        priceStr = `${q.regularMarketPrice.toFixed(3)}%`;
-      } else {
-        priceStr = q.regularMarketPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-      }
+        const changeStr = `${changePct > 0 ? '+' : ''}${changePct.toFixed(2)}%`;
 
-      // Format change percentage
-      const changePct = q.regularMarketChangePercent;
-      const changeStr = `${changePct > 0 ? '+' : ''}${changePct.toFixed(2)}%`;
-
-      return {
-        symbol: name,
-        price: priceStr,
-        change: changeStr,
-        up: changePct >= 0
-      };
-    });
+        return {
+          symbol: q.symbol,
+          price: priceStr,
+          change: changeStr,
+          up: changePct >= 0
+        };
+      });
 
     res.json(formattedData);
   } catch (err) {
