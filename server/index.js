@@ -6,6 +6,8 @@ import pkg from "@prisma/client";
 import pg from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { investmentAgent } from "./lib/graph.js";
+import { model } from "./lib/model.js";
+import { SystemMessage, HumanMessage, AIMessage } from "@langchain/core/messages";
 
 const { PrismaClient } = pkg;
 const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
@@ -148,6 +150,53 @@ app.get("/api/history", async (req, res) => {
   } catch (error) {
     console.error("Failed to fetch history:", error);
     res.status(500).json({ error: "Failed to fetch history" });
+  }
+});
+
+app.post("/api/chat", async (req, res) => {
+  let userId = null;
+  const tokenStr = req.headers.authorization?.replace('Bearer ', '');
+  if (tokenStr) {
+    try {
+      const { verifyToken } = await import("@clerk/express");
+      const payload = await verifyToken(tokenStr, { 
+        secretKey: process.env.CLERK_SECRET_KEY, 
+        clockSkewInMs: 15 * 60 * 1000 
+      });
+      userId = payload.sub;
+    } catch (err) {
+      console.error("Token verification failed:", err.message);
+    }
+  }
+
+  if (!userId) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  const { messages } = req.body;
+  if (!messages || !Array.isArray(messages)) {
+    return res.status(400).json({ error: "Missing or invalid 'messages' array" });
+  }
+
+  try {
+    const systemPrompt = new SystemMessage(
+      "You are Pulse, an elite AI Investment Researcher and financial analyst. " +
+      "Provide concise, institutional-grade insights. Be sharp, analytical, and highly knowledgeable about stock markets, macroeconomics, and finance."
+    );
+
+    // Convert frontend messages to LangChain message objects
+    const formattedMessages = messages.map(msg => {
+      if (msg.role === 'user') return new HumanMessage(msg.content);
+      if (msg.role === 'assistant') return new AIMessage(msg.content);
+      return new HumanMessage(msg.content);
+    });
+
+    const response = await model.invoke([systemPrompt, ...formattedMessages]);
+    
+    res.json({ reply: response.content });
+  } catch (err) {
+    console.error("Chat error:", err);
+    res.status(500).json({ error: "Failed to process chat request" });
   }
 });
 

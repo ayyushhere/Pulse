@@ -8,6 +8,7 @@ import Portfolio from "./components/Portfolio.jsx";
 import Hero from "./components/Hero.jsx";
 import History from "./components/History.jsx";
 import Pricing from "./components/Pricing.jsx";
+import PulseChatbot from "./components/PulseChatbot.jsx";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
 
@@ -310,6 +311,7 @@ export default function App() {
           </main>
         </div>
       </SignedIn>
+      <PulseChatbot />
     </div>
   );
 }
