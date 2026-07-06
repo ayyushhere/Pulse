@@ -198,7 +198,7 @@ export default function App() {
                       <div className="w-full max-w-3xl mb-20 relative">
                         {/* Glow effect behind search bar */}
                         <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/30 to-purple-500/30 blur-xl opacity-50 rounded-full"></div>
-                        <form onSubmit={handleSearch} className="relative z-10">
+                        <form onSubmit={handleSubmit} className="relative z-10">
                           <input 
                             type="text"
                             placeholder="Search company (e.g. Amazon, NFLX)..."
