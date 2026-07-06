@@ -17,7 +17,7 @@ export default function TopNav({ company, setCompany, handleSubmit, loading }) {
   ];
 
   return (
-    <header className="fixed top-4 left-1/2 -translate-x-1/2 w-full max-w-6xl z-50 px-4">
+    <header className="fixed top-14 left-1/2 -translate-x-1/2 w-full max-w-6xl z-50 px-4">
       <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.3)] flex items-center justify-between px-6 py-3">
         
         {/* Logo */}

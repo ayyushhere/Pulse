@@ -17,7 +17,7 @@ export default function MarketTicker() {
   const seamlessData = [...tickerData, ...tickerData];
 
   return (
-    <div className="w-full bg-black/40 border-b border-white/5 overflow-hidden flex items-center h-10 hover-pause group">
+    <div className="fixed top-0 left-0 right-0 z-40 w-full bg-[#07091D]/90 backdrop-blur-md border-b border-white/10 overflow-hidden flex items-center h-10 hover-pause group">
       <div className="flex animate-marquee whitespace-nowrap min-w-full">
         {seamlessData.map((item, idx) => (
           <div key={idx} className="flex items-center space-x-2 px-8 border-r border-white/10 last:border-0">
