@@ -5,6 +5,7 @@ import { clerkMiddleware } from "@clerk/express";
 import pkg from "@prisma/client";
 import pg from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
+import yahooFinance from 'yahoo-finance2';
 import { investmentAgent } from "./lib/graph.js";
 import { model } from "./lib/model.js";
 import { SystemMessage, HumanMessage, AIMessage } from "@langchain/core/messages";
@@ -197,6 +198,64 @@ app.post("/api/chat", async (req, res) => {
   } catch (err) {
     console.error("Chat error:", err);
     res.status(500).json({ error: "Failed to process chat request" });
+  }
+});
+
+app.get("/api/ticker", async (req, res) => {
+  try {
+    const symbols = ['^GSPC', '^IXIC', '^DJI', 'BTC-USD', 'ETH-USD', 'GC=F', '^VIX', '^TNX'];
+    
+    // Fetch quotes in parallel
+    const quotes = await Promise.all(
+      symbols.map(async (symbol) => {
+        try {
+          const quote = await yahooFinance.quote(symbol);
+          return quote;
+        } catch (e) {
+          console.error(`Error fetching quote for ${symbol}:`, e.message);
+          return null;
+        }
+      })
+    );
+
+    const formattedData = quotes.filter(q => q !== null).map(q => {
+      // Map Yahoo symbols to clean names
+      let name = q.symbol;
+      if (name === '^GSPC') name = 'S&P 500';
+      else if (name === '^IXIC') name = 'NASDAQ';
+      else if (name === '^DJI') name = 'DOW';
+      else if (name === 'BTC-USD') name = 'BTC';
+      else if (name === 'ETH-USD') name = 'ETH';
+      else if (name === 'GC=F') name = 'GOLD';
+      else if (name === '^VIX') name = 'VIX';
+      else if (name === '^TNX') name = 'US10Y';
+
+      // Format price based on asset
+      let priceStr = '';
+      if (['BTC', 'ETH', 'GOLD'].includes(name)) {
+        priceStr = `$${q.regularMarketPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      } else if (name === 'US10Y') {
+        priceStr = `${q.regularMarketPrice.toFixed(3)}%`;
+      } else {
+        priceStr = q.regularMarketPrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+      }
+
+      // Format change percentage
+      const changePct = q.regularMarketChangePercent;
+      const changeStr = `${changePct > 0 ? '+' : ''}${changePct.toFixed(2)}%`;
+
+      return {
+        symbol: name,
+        price: priceStr,
+        change: changeStr,
+        up: changePct >= 0
+      };
+    });
+
+    res.json(formattedData);
+  } catch (err) {
+    console.error("Ticker fetch error:", err);
+    res.status(500).json({ error: "Failed to fetch ticker data" });
   }
 });
 

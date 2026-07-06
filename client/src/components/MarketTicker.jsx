@@ -1,20 +1,43 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import { TrendingUp, TrendingDown } from "lucide-react";
 
-export default function MarketTicker() {
-  const tickerData = [
-    { symbol: "S&P 500", price: "5,234.18", change: "+0.42%", up: true },
-    { symbol: "NASDAQ", price: "16,401.84", change: "+0.85%", up: true },
-    { symbol: "DOW", price: "39,127.14", change: "-0.15%", up: false },
-    { symbol: "BTC", price: "$68,420", change: "+2.1%", up: true },
-    { symbol: "ETH", price: "$3,450", change: "+1.2%", up: true },
-    { symbol: "GOLD", price: "$2,165", change: "-0.3%", up: false },
-    { symbol: "VIX", price: "13.4", change: "-2.5%", up: false },
-    { symbol: "US10Y", price: "4.21%", change: "+0.01%", up: true },
-  ];
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
 
-  // Double the data to create a seamless infinite scroll loop
-  const seamlessData = [...tickerData, ...tickerData];
+export default function MarketTicker() {
+  const [tickerData, setTickerData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTickerData = async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/ticker`);
+        if (response.ok) {
+          const data = await response.json();
+          setTickerData(data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch market ticker data:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTickerData();
+    // Refresh every 60 seconds
+    const interval = setInterval(fetchTickerData, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Duplicate data to create a seamless scrolling effect
+  const seamlessData = tickerData.length > 0 ? [...tickerData, ...tickerData, ...tickerData] : [];
+
+  if (loading && tickerData.length === 0) {
+    return (
+      <div className="fixed top-0 left-0 right-0 z-40 w-full bg-[#07091D]/90 backdrop-blur-md border-b border-white/10 overflow-hidden flex items-center justify-center h-10">
+        <span className="text-slate-400 text-xs font-mono animate-pulse">Loading Live Market Data...</span>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed top-0 left-0 right-0 z-40 w-full bg-[#07091D]/90 backdrop-blur-md border-b border-white/10 overflow-hidden flex items-center h-10 hover-pause group">
