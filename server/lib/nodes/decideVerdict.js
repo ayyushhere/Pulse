@@ -13,9 +13,9 @@ const prompt = ChatPromptTemplate.fromMessages([
     "system",
     "You are an investment decision-maker. Based on the financial and market " +
       "analysis below, decide INVEST or PASS. Respond with ONLY valid JSON, " +
-      "no markdown fences, using this exact structure. ALL financial figures and stock prices MUST be in Indian Rupees (₹): " +
+      "no markdown fences, using this exact structure. ALL financial figures and stock prices MUST be in US Dollars ($): " +
       '{{"verdict": "INVEST or PASS", "confidence": 0-100, ' +
-      '"price": "₹150.00", "priceChange": "+1.5%", ' +
+      '"price": "$150.00", "priceChange": "+1.5%", ' +
       '"reasoning": ["bullet 1", "bullet 2", "bullet 3"], ' +
       '"criticalUpdates": [{{"time": "2 HOURS AGO", "text": "Recent news item"}}], ' +
       '"metrics": [{{"name": "P/E Ratio", "val": "30x", "avg": "25x", "var": "+20%", "pos": false}}]}}',
