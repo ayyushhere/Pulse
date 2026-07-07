@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { X, Send, MessageSquare, Loader2 } from "lucide-react";
+import ReactMarkdown from 'react-markdown';
 
 export default function PulseChatbot() {
   const { getToken, isSignedIn } = useAuth();
@@ -86,12 +87,23 @@ export default function PulseChatbot() {
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
             {messages.map((msg, idx) => (
               <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[85%] rounded-2xl px-4 py-2 ${
+                <div className={`max-w-[85%] rounded-2xl px-4 py-3 ${
                   msg.role === 'user' 
                     ? 'bg-blue-600/20 text-blue-100 border border-blue-500/20 rounded-br-sm' 
                     : 'bg-white/5 text-slate-200 border border-white/10 rounded-bl-sm'
                 }`}>
-                  <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+                  <div className="text-sm leading-relaxed">
+                    <ReactMarkdown
+                      components={{
+                        p: ({node, ...props}) => <p className="mb-2 last:mb-0" {...props} />,
+                        strong: ({node, ...props}) => <strong className="font-bold text-white" {...props} />,
+                        ul: ({node, ...props}) => <ul className="list-disc pl-4 mb-2 space-y-1" {...props} />,
+                        ol: ({node, ...props}) => <ol className="list-decimal pl-4 mb-2 space-y-1" {...props} />,
+                      }}
+                    >
+                      {msg.content}
+                    </ReactMarkdown>
+                  </div>
                 </div>
               </div>
             ))}
