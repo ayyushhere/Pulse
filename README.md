@@ -1,57 +1,99 @@
-# Pulse - AI Investment Research Agent
+<div align="center">
+  <img src="./client/public/demo.gif" alt="Pulse AI Demo" width="600" />
+  <h1>Pulse: AI Investment Researcher</h1>
+  <p><strong>Institutional-grade AI financial analysis in seconds.</strong></p>
+
+  [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
+  [![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
+  [![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+  [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://postgresql.org)
+</div>
+
+<br />
 
 🚀 **Live Demo:** [https://pulse-aie.vercel.app/](https://pulse-aie.vercel.app/)
 
-## Overview - What it does
-Pulse is a full-stack AI-powered investment research platform. It takes a company ticker or name, performs deep-dive fundamental and sentiment research, and provides a decisive **Invest or Pass** verdict. 
+---
 
-The application utilizes a proprietary agentic workflow to gather real-time financial data, analyze global news sentiment, and synthesize the information into a professional, institutional-grade research report. The results are cached and persisted, allowing for instant retrieval of historical research via the user dashboard.
+## 📖 Overview
 
-## How to run it - Setup and run steps
+**Pulse** is a full-stack, AI-powered investment research platform designed to mimic the workflow of a professional hedge fund analyst. Give it a company ticker (e.g., `NVDA`, `AAPL`) and Pulse performs a deep-dive fundamental analysis, reads the latest global news, and provides a decisive **Invest or Pass** verdict.
+
+The application utilizes a proprietary **agentic workflow** powered by LangGraph, enabling the AI to autonomously gather real-time financial data, gauge market sentiment, and synthesize a comprehensive report.
+
+---
+
+## ✨ Features
+
+- **Live Market Ticker:** Real-time data streaming across the dashboard (powered by Finnhub).
+- **Agentic AI Workflow:** Autonomous research gathering using Google Gemini & LangChain.
+- **Real-time Web Search:** Integration with Tavily API for up-to-the-minute news scraping.
+- **Secure Authentication:** User identity and session management via Clerk.
+- **Historical Portfolio:** Instant retrieval of past research cached in a Neon PostgreSQL database.
+- **Server-Sent Events (SSE):** Streaming AI thought processes directly to the UI.
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+- **Framework:** React (Vite)
+- **Styling:** TailwindCSS, Glassmorphism UI
+- **Icons:** Lucide React
+- **Routing:** React Router DOM
+
+### Backend
+- **Runtime:** Node.js, Express.js
+- **Database:** PostgreSQL (Neon) managed by Prisma ORM
+- **Authentication:** Clerk (`@clerk/express`)
+- **AI Engine:** LangGraph.js, LangChain.js, Google Gemini (`gpt-4o` / `gemini-1.5-pro`)
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
 - Node.js (v18+)
-- PostgreSQL database
-- API Keys:
-  - `OPENAI_API_KEY` (for LangGraph/LLM)
-  - `TAVILY_API_KEY` (for web search/news gathering)
-  - `FMP_API_KEY` (Financial Modeling Prep API for real-time financial data)
-  - Clerk API keys (for authentication)
+- PostgreSQL Database URL (e.g., Neon or local)
+- Free API Keys:
+  - `GOOGLE_API_KEY` (Gemini LLM)
+  - `TAVILY_API_KEY` (Web Search)
+  - `FINNHUB_API_KEY` (Live Ticker Data)
+  - `CLERK_PUBLISHABLE_KEY` & `CLERK_SECRET_KEY` (Authentication)
 
-### 1. Clone & Install Dependencies
+### 1. Clone & Install
 You will need two terminals running concurrently (one for the frontend, one for the backend).
 
-**Backend (Server)**
 ```bash
+# Terminal 1: Backend
 cd server
 npm install
-```
 
-**Frontend (Client)**
-```bash
+# Terminal 2: Frontend
 cd client
 npm install
 ```
 
 ### 2. Environment Variables
-Create a `.env` file in the `server` directory:
+
+Create a `.env` in the `server` directory:
 ```env
-PORT=3000
+PORT=3001
 DATABASE_URL="postgresql://user:password@localhost:5432/investiq?schema=public"
-OPENAI_API_KEY="your_openai_api_key"
+GOOGLE_API_KEY="your_gemini_api_key"
 TAVILY_API_KEY="your_tavily_api_key"
-FMP_API_KEY="your_fmp_api_key"
+FINNHUB_API_KEY="your_finnhub_api_key"
 CLERK_PUBLISHABLE_KEY="your_clerk_pub_key"
 CLERK_SECRET_KEY="your_clerk_secret_key"
 ```
 
-Create a `.env` file in the `client` directory:
+Create a `.env` in the `client` directory:
 ```env
+VITE_API_URL="http://localhost:3001"
 VITE_CLERK_PUBLISHABLE_KEY="your_clerk_pub_key"
 ```
 
-### 3. Database Setup
-Ensure your PostgreSQL instance is running.
+### 3. Database Initialization
 ```bash
 cd server
 npx prisma db push
@@ -59,74 +101,43 @@ npx prisma generate
 ```
 
 ### 4. Run the Application
-Start the backend server:
 ```bash
+# Terminal 1
 cd server
 npm run dev
-```
 
-Start the frontend client:
-```bash
+# Terminal 2
 cd client
 npm run dev
 ```
 Navigate to `http://localhost:5173` in your browser.
 
-## How it works - Approach and architecture
+---
 
-### Architecture
-- **Frontend:** React (Vite), TailwindCSS, Lucide React (Icons), React Router.
-- **Backend:** Node.js, Express.js.
-- **Database:** PostgreSQL managed by Prisma ORM.
-- **Authentication:** Clerk (integrated on both client and server via `@clerk/clerk-react` and `@clerk/express`).
-- **AI Engine:** `LangGraph.js` and `LangChain.js` utilizing OpenAI's `gpt-4o`.
+## 🧠 How The AI Works (LangGraph)
 
-### The AI Workflow (LangGraph)
-The core of the application is an agentic workflow defined in LangGraph (`investmentAgent.js`). It operates as a state machine with the following nodes:
-1. **`gatherFinancials`**: Calls the Financial Modeling Prep (FMP) API to fetch real-time income statements, balance sheets, and key metrics.
-2. **`gatherNews`**: Uses the Tavily Search API to scrape recent news articles and market sentiment regarding the target company.
-3. **`analyzeFinancials`**: An LLM node that processes the raw financial data to evaluate growth, profitability, and financial health.
-4. **`analyzeMarket`**: An LLM node that processes the news context to determine market sentiment, regulatory risks, and tailwinds.
-5. **`decideVerdict`**: The final LLM synthesizer node that takes both analyses, weighs the pros and cons, and issues a final **INVEST** or **PASS** verdict with detailed reasoning, denominated in INR (₹).
+The core of the application is an agentic workflow defined in LangGraph (`investmentAgent.js`). It operates as a state machine:
 
-### Data Flow
-- The React client streams the LangGraph execution via Server-Sent Events (SSE). This allows the UI to show real-time animated loading steps ("Scanning Global News...", "Performing Deep Financial Analysis...").
-- Upon completion, the backend saves the entire JSON state of the AI graph to PostgreSQL, linked to the user's Clerk ID.
-- The user can instantly revisit past research in the "History" tab without re-triggering the expensive AI pipeline.
+1. **`gatherFinancials`**: Fetches quantitative data.
+2. **`gatherNews`**: Uses Tavily API to scrape recent articles and determine market sentiment.
+3. **`analyzeFinancials`**: An LLM node that processes the raw financial data to evaluate growth and health.
+4. **`analyzeMarket`**: An LLM node that processes the news to determine sentiment, regulatory risks, and tailwinds.
+5. **`decideVerdict`**: The final synthesizer node that weighs all inputs and issues a final **INVEST** or **PASS** verdict with detailed reasoning.
 
-## Key decisions & trade-offs
+### Why LangGraph?
+Financial research requires a strict, multi-step process. Standard autonomous LLM agents (like ReAct) can hallucinate API calls or skip critical research steps. LangGraph ensures data is strictly gathered *before* analysis begins.
 
-1. **LangGraph vs. Standard LLM Chain:** 
-   - *Decision:* Used LangGraph for explicit state management and deterministic routing.
-   - *Why:* Financial research requires a rigid, multi-step process (Data gathering -> Individual Analysis -> Final Synthesis). Standard LLM agents (like ReAct) can hallucinate API calls or skip steps. LangGraph ensures data is strictly gathered before analysis begins.
-2. **Streaming Execution (SSE):** 
-   - *Decision:* Implemented Server-Sent Events for the research endpoint.
-   - *Why:* AI research takes 15-30 seconds. A standard HTTP request would cause browser timeouts and poor UX. SSE provides real-time state updates to the UI.
-3. **Database Snapshotting:** 
-   - *Decision:* Storing the entire LangGraph state object in a `JSON` column in Postgres.
-   - *Why:* Relational mapping of complex AI outputs is fragile. Saving the JSON snapshot allows the frontend to flawlessly render historical results exactly as they appeared when generated.
-4. **Trade-off - Extensibility vs Scope:** 
-   - Due to the 7-day limit, I opted for a predefined graph structure rather than a dynamic agent that writes its own queries. This guarantees reliability and format consistency at the cost of the agent's absolute autonomy.
+---
 
-## Example runs
+## 📈 Future Roadmap
 
-*Note: Live results will vary based on current market conditions when the agent runs.*
+- [ ] **Multi-Agent Debate:** Implement a "Bull" and "Bear" agent that debate the stock before the final verdict node synthesizes their arguments.
+- [ ] **Technical Analysis:** Fetch historical price data to calculate moving averages (SMA/EMA) and RSI to time entry points.
+- [ ] **PDF Export:** Allow users to download finalized research reports as styled PDFs.
+- [ ] **Follow-up Chatbot:** Upgrade to WebSockets for bi-directional communication, allowing users to ask follow-up questions about the generated report.
 
-1. **NVIDIA (NVDA)**
-   - **Verdict:** INVEST
-   - **Reasoning:** Sustained hyper-growth in data center revenue driven by AI chip demand. Exceptionally high gross margins. Despite high valuation multiples, the monopoly-like moat in GPU accelerators justifies the premium.
-2. **GameStop (GME)**
-   - **Verdict:** PASS
-   - **Reasoning:** Declining core software revenues. Business relies heavily on meme-stock capital raises rather than fundamental cash flow generation. High volatility and disconnected valuation.
-3. **Tata Motors (TATAMOTORS.NS)**
-   - **Verdict:** INVEST
-   - **Reasoning:** Strong turnaround in JLR operations. Dominant market share in India's EV transition. Improving debt profile and robust cash flows.
+---
 
-## What you would improve with more time
-1. **Multi-Agent Debate:** Implement two separate LangGraph agents (a "Bull" and a "Bear") that debate the stock before the final verdict node synthesizes their arguments.
-2. **Technical Analysis Integration:** Add a node that fetches historical price data to calculate moving averages and RSI to time the entry point better.
-3. **PDF Export:** Allow users to download the finalized research report as a styled PDF.
-4. **WebSockets instead of SSE:** Upgrade to full WebSockets for bi-directional communication, allowing the user to "interrupt" or steer the agent mid-research.
-
-## Bonus: LLM Chat Transcript
-The AI pair-programming transcript for this project's development is included in the submission bundle, demonstrating the iterative architecture and debugging process.
+<div align="center">
+  <p>Built with ❤️ using React, LangGraph, and Gemini.</p>
+</div>
