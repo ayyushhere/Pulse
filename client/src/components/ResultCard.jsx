@@ -136,7 +136,14 @@ export default function ResultCard({ data }) {
             <tbody className="divide-y divide-white/10">
               {metrics.map((row, i) => (
                 <tr key={i} className="hover:bg-white/10 transition-colors">
-                  <td className="px-6 py-4 font-semibold text-slate-300">{row.name}</td>
+                  <td className="px-6 py-4">
+                    <div className="font-semibold text-slate-300">{row.name}</div>
+                    {row.desc && (
+                      <div className="text-[11px] text-slate-500 font-normal mt-1 leading-tight max-w-[200px]">
+                        {row.desc}
+                      </div>
+                    )}
+                  </td>
                   <td className="px-6 py-4 text-slate-400">{row.val}</td>
                   <td className="px-6 py-4 text-slate-400">{row.avg}</td>
                   <td className={`px-6 py-4 font-medium ${row.pos ? 'text-emerald-400' : 'text-red-400'}`}>

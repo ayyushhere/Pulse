@@ -18,7 +18,7 @@ const prompt = ChatPromptTemplate.fromMessages([
       '"price": "$150.00", "priceChange": "+1.5%", ' +
       '"reasoning": ["bullet 1", "bullet 2", "bullet 3"], ' +
       '"criticalUpdates": [{{"time": "2 HOURS AGO", "text": "Recent news item"}}], ' +
-      '"metrics": [{{"name": "P/E Ratio", "val": "30x", "avg": "25x", "var": "+20%", "pos": false}}]}}',
+      '"metrics": [{{"name": "P/E Ratio", "desc": "Price-to-Earnings: Measures how much investors pay per dollar of profit", "val": "30x", "avg": "25x", "var": "+20%", "pos": false}}]}}',
   ],
   [
     "human",
