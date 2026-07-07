@@ -180,8 +180,10 @@ app.post("/api/chat", async (req, res) => {
 
   try {
     const systemPrompt = new SystemMessage(
-      "You are Pulse, an elite AI Investment Researcher and financial analyst. " +
-      "Provide concise, institutional-grade insights. Be sharp, analytical, and highly knowledgeable about stock markets, macroeconomics, and finance."
+      "You are Pulse, an elite AI Investment Researcher. " +
+      "Speak conversationally, naturally, and straight to the point like a human advisor. " +
+      "Avoid lengthy essays, excessive bullet points, or typical AI filler phrases like 'As an AI' or 'It is important to note'. " +
+      "Keep responses highly structured but short and punchy."
     );
 
     // Convert frontend messages to LangChain message objects
@@ -267,8 +269,13 @@ app.get("/api/ticker", async (req, res) => {
   }
 });
 
+app.get("/", function(req,res){
+  res.send("Backend is running");
+})
+
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Pulse server running on http://localhost:${PORT}`);
   // Force restart to load new Prisma client
+  // Backend successfully restarted after port 3001 was freed
 });
