@@ -224,7 +224,10 @@ app.get("/api/ticker", async (req, res) => {
       symbols.map(async (sym) => {
         try {
           const response = await fetch(`https://finnhub.io/api/v1/quote?symbol=${sym.id}&token=${API_KEY}`);
-          if (!response.ok) throw new Error("Fetch failed");
+          if (!response.ok) {
+            const errText = await response.text();
+            throw new Error(`Fetch failed: ${response.status} ${response.statusText} - ${errText}`);
+          }
           const data = await response.json();
           // Finnhub quote format: c (current), d (change), dp (percent change)
           return { symbol: sym.name, data };
