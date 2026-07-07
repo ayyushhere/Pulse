@@ -102,9 +102,9 @@ export default function ResultCard({ data }) {
 
           <div className="space-y-4">
             <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest">Critical Updates</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="flex flex-col gap-3">
               {criticalUpdates.map((update, i) => (
-                <div key={i} className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-5 shadow-sm">
+                <div key={i} className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-5 shadow-sm w-full">
                   <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 flex items-center">
                     <Clock size={12} className="mr-1.5" />
                     {update.time}
